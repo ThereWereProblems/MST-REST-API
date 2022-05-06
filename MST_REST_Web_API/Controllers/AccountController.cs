@@ -16,7 +16,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpPost("create")]
-        [AllowAnonymous]
+        [Authorize]
         public ActionResult RegisterUrer([FromBody] RegisterUserDto dto)
         {
             _accountService.RegisterUser(dto);

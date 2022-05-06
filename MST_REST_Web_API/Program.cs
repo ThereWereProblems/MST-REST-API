@@ -42,6 +42,8 @@ builder.Services.AddScoped<ErrorHandlingMiddleware>();
 //builder.Services.AddScoped<RestShopSeeder>();
 builder.Services.AddScoped < IPasswordHasher<User>, PasswordHasher<User>>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IUserContextService, UserContextService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
