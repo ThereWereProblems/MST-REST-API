@@ -11,5 +11,6 @@ namespace MST_REST_Web_API.Entities
         [Required]
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public string PhotoURL { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MST_REST_Web_API.Entities;
 using MST_REST_Web_API.Exceptions;
 using MST_REST_Web_API.Models.DTO;
@@ -8,6 +9,8 @@ namespace MST_REST_Web_API.Services
     public interface IOrderService
     {
         int Create(CreateOrderDto dto);
+        void SendOrder(int id);
+        List<Order> GetToDo();
         List<Order> GetAll();
 
     }
@@ -62,12 +65,28 @@ namespace MST_REST_Web_API.Services
             return order.Id;
         }
 
-        public List<Order> GetAll() // later aligator
+        void IOrderService.SendOrder(int id)
         {
-            var listOfOrders = _context.Orders.ToList();
-            return listOfOrders;
+            var order = _context.Orders.FirstOrDefault(x => x.Id == id);
+            if (order == null)
+                throw new NotFoundException($"Product with id: {id} not exist");
 
+            order.IsSend = true;
+            _context.SaveChanges();
         }
 
+        List<Order> IOrderService.GetToDo()
+        {
+            var listOfOrders = _context.Orders.Include(x => x.Products).Where(x => x.IsSend == false).ToList();
+
+            return listOfOrders;
+        }
+
+        public List<Order> GetAll() // later aligator
+        {
+            var listOfOrders = _context.Orders.Include(x => x.Products).ToList();
+
+            return listOfOrders;
+        }
     }
 }

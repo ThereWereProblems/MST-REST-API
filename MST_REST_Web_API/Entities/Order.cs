@@ -13,5 +13,6 @@ namespace MST_REST_Web_API.Entities
         public DateTime Date { get; set; }
         public List<Product> Products { get; set; }
         public decimal TotalCost { get; set; }
+        public bool IsSend { get; set; }
     }
 }

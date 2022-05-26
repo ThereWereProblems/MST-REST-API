@@ -37,7 +37,8 @@ namespace MST_REST_Web_API.Services
             {
                 Price = dto.Price,
                 Name = dto.Name,
-                Description = dto.Description
+                Description = dto.Description,
+                PhotoURL = dto.PhotoURL
             };
             _context.Products.Add(product);
 
@@ -66,6 +67,7 @@ namespace MST_REST_Web_API.Services
             product.Name = dto.Name;
             product.Description = dto.Description;
             product.Price = dto.Price;
+            product.PhotoURL = dto.PhotoURL;
 
             _context.SaveChanges();
         }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MST_REST_Web_API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220506191457_init")]
+    [Migration("20220526152104_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,6 +51,62 @@ namespace MST_REST_Web_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Addresses");
+                });
+
+            modelBuilder.Entity("MST_REST_Web_API.Entities.Endpoint", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EndpointTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Heder")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Parametrs")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ScriptId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EndpointTypeId");
+
+                    b.HasIndex("ScriptId");
+
+                    b.ToTable("Endpoints");
+                });
+
+            modelBuilder.Entity("MST_REST_Web_API.Entities.EndpointType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EndpointTypes");
                 });
 
             modelBuilder.Entity("MST_REST_Web_API.Entities.Order", b =>
@@ -106,6 +162,51 @@ namespace MST_REST_Web_API.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("MST_REST_Web_API.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("MST_REST_Web_API.Entities.Script", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Comment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Succes")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Scripts");
+                });
+
             modelBuilder.Entity("MST_REST_Web_API.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -126,9 +227,29 @@ namespace MST_REST_Web_API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("MST_REST_Web_API.Entities.Endpoint", b =>
+                {
+                    b.HasOne("MST_REST_Web_API.Entities.EndpointType", "EndpointType")
+                        .WithMany()
+                        .HasForeignKey("EndpointTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MST_REST_Web_API.Entities.Script", null)
+                        .WithMany("Endpoints")
+                        .HasForeignKey("ScriptId");
+
+                    b.Navigation("EndpointType");
                 });
 
             modelBuilder.Entity("MST_REST_Web_API.Entities.Order", b =>
@@ -149,9 +270,25 @@ namespace MST_REST_Web_API.Migrations
                         .HasForeignKey("OrderId");
                 });
 
+            modelBuilder.Entity("MST_REST_Web_API.Entities.User", b =>
+                {
+                    b.HasOne("MST_REST_Web_API.Entities.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Role");
+                });
+
             modelBuilder.Entity("MST_REST_Web_API.Entities.Order", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("MST_REST_Web_API.Entities.Script", b =>
+                {
+                    b.Navigation("Endpoints");
                 });
 #pragma warning restore 612, 618
         }

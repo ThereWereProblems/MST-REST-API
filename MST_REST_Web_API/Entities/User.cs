@@ -12,5 +12,8 @@ namespace MST_REST_Web_API.Entities
         public string Login { get; set; }
         [Required]
         public string PasswordHash { get; set; }
+        public int RoleId { get; set; }
+        public virtual Role Role { get; set; }
+
     }
 }

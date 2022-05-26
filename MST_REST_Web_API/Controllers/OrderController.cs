@@ -27,8 +27,26 @@ namespace MST_REST_Web_API.Controllers
             return Created($"/api/orders/{id}", null);
         }
 
-        [HttpGet]
-        [Authorize]
+        [HttpPut("edit/{id}")]
+        [Authorize(Roles = "Shopkeeper")]
+        public ActionResult SendOrder([FromRoute] int id)
+        {
+            _ordersSrevice.SendOrder(id);
+
+            return Ok();
+        }
+
+        [HttpGet("gettodo")]
+        [Authorize(Roles = "Shopkeeper")]
+        public ActionResult GetToDo()
+        {
+            var listOfOrders = _ordersSrevice.GetToDo();
+
+            return Ok(listOfOrders);
+        }
+
+        [HttpGet("getall")]
+        [Authorize(Roles = "Shopkeeper")]
         public ActionResult GetAllOrders()
         {
             var listOfOrders = _ordersSrevice.GetAll();

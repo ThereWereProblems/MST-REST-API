@@ -16,7 +16,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult RegisterUrer([FromBody] RegisterUserDto dto)
         {
             _accountService.RegisterUser(dto);
@@ -24,7 +24,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete([FromRoute] int id)
         {
             var IsDeleted = _accountService.Delete(id);
@@ -45,7 +45,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpGet("getusers")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public ActionResult GetUsers()
         {
             var listOfUsers = _accountService.GetAll();

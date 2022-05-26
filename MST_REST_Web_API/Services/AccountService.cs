@@ -44,7 +44,8 @@ namespace MST_REST_Web_API.Services
             var newUser = new User()
             {
                 Name = dto.Name,
-                Login = dto.Login
+                Login = dto.Login,
+                RoleId = dto.RoleId
             };
 
             var hashedPassword = _passwordHasher.HashPassword(newUser, dto.Password);
@@ -86,6 +87,7 @@ namespace MST_REST_Web_API.Services
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, $"{user.Name}"),
+                new Claim(ClaimTypes.Role, $"{user.Role.Name}")
             };
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
