@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MST_REST_Web_API.Entities;
 using MST_REST_Web_API.Exceptions;
@@ -69,7 +70,7 @@ namespace MST_REST_Web_API.Services
         }
         public string GenerateJwt(LoginDto dto)
         {
-            var user = _context.Users
+            var user = _context.Users.Include(x => x.Role)
                 .FirstOrDefault(u => u.Login == dto.Login);
             if (user is null)
             {
