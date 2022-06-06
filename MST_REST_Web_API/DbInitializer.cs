@@ -50,19 +50,19 @@ namespace MST_REST_Web_API
             {
                 new Role()
                 {
-                    Name="Customer"
-                },
-                new Role()
-                {
-                    Name="Warehouseman"
-                },
-                new Role()
-                {
                     Name="Admin"
                 },
                 new Role()
                 {
-                    Name="Blogger"
+                    Name="Configurator"
+                },
+                new Role()
+                {
+                    Name="Tester"
+                },
+                new Role()
+                {
+                    Name="Shopkeeper"
                 }
             };
             return roles;
