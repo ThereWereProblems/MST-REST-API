@@ -31,12 +31,26 @@ namespace MST_REST_Web_API.Services
 
         void ITestService.AddTest(ScriptDto dto)
         {
+            if (dto.Endpoints == null || dto.Endpoints.Count == 0)
+                throw new BadRequestException("List of endpoints can not be empty");
+
             Script script = new Script()
             {
                 Name = dto.Name,
-                Endpoints = dto.Endpoints,
+                Endpoints = new List<Entities.Endpoint>(),
                 Description = dto.Description
             };
+
+            foreach (var item in dto.Endpoints)
+            {
+                var endpoint = new Entities.Endpoint();
+                endpoint.Parametrs = item.Parametrs;
+                endpoint.URL = item.URL;
+                endpoint.Heder = item.Heder;
+                endpoint.Body = item.Body;
+                endpoint.EndpointTypeId = item.EndpointTypeId;
+                script.Endpoints.Add(endpoint);
+            }
 
             _context.Scripts.Add(script);
             _context.SaveChanges();
@@ -55,6 +69,9 @@ namespace MST_REST_Web_API.Services
 
         void ITestService.UpdateTest(int id, ScriptDto dto)
         {
+            if (dto.Endpoints == null || dto.Endpoints.Count == 0)
+                throw new BadRequestException("List of endpoints can not be empty");
+
             var script = _context.Scripts.FirstOrDefault(x => x.Id == id);
 
             if (script == null)
@@ -62,8 +79,19 @@ namespace MST_REST_Web_API.Services
 
 
             script.Name = dto.Name;
-            script.Endpoints = dto.Endpoints;
+            script.Endpoints = new List<Entities.Endpoint>();
             script.Description = dto.Description;
+
+            foreach (var item in dto.Endpoints)
+            {
+                var endpoint = new Entities.Endpoint();
+                endpoint.Parametrs = item.Parametrs;
+                endpoint.URL = item.URL;
+                endpoint.Heder = item.Heder;
+                endpoint.Body = item.Body;
+                endpoint.EndpointTypeId = item.EndpointTypeId;
+                script.Endpoints.Add(endpoint);
+            }
 
             _context.SaveChanges();
         }
@@ -87,12 +115,26 @@ namespace MST_REST_Web_API.Services
         {
             var result = _context.Scripts.Include(x => x.Endpoints).Where(x => x.IsDone == false).ToList();
 
+            foreach (var item in result)
+            {
+                var ids = item.Endpoints.Select(x => x.Id).ToList();
+                item.Endpoints = _context.Endpoints.Include(x => x.EndpointType).Where(x => ids.Contains(x.Id)).ToList();
+            }
+
             return result;
         }
 
         List<Script> ITestService.GetAll()
         {
-            return _context.Scripts.Include(x => x.Endpoints).ToList();
+            var result = _context.Scripts.Include(x => x.Endpoints).ToList();
+
+            foreach (var item in result)
+            {
+                var ids = item.Endpoints.Select(x => x.Id).ToList();
+                item.Endpoints = _context.Endpoints.Include(x => x.EndpointType).Where(x => ids.Contains(x.Id)).ToList();
+            }
+
+            return result;
         }
     }
 }

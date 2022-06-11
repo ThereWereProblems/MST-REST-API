@@ -34,6 +34,16 @@ namespace MST_REST_Web_API
                     }
                 }
 
+                if (!_dbContext.EndpointTypes.Any())
+                {
+                    var roles = GetEndpoints();
+                    foreach (var item in roles)
+                    {
+                        _dbContext.Add(item);
+                        _dbContext.SaveChanges();
+                    }
+                }
+
                 var user = _dbContext.Users.FirstOrDefault(x => x.Login == "admin");
                 if (user == null)
                 {
@@ -67,6 +77,31 @@ namespace MST_REST_Web_API
             };
             return roles;
         }
+
+        private IEnumerable<EndpointType> GetEndpoints()
+        {
+            var roles = new List<EndpointType>()
+            {
+                new EndpointType()
+                {
+                    Name="POST"
+                },
+                new EndpointType()
+                {
+                    Name="PUT"
+                },
+                new EndpointType()
+                {
+                    Name="GET"
+                },
+                new EndpointType()
+                {
+                    Name="DELETE"
+                }
+            };
+            return roles;
+        }
+
         private User CreateAdmin()// created admin account just for testing (hard coded).
         {
             var newAdmin = new User()
