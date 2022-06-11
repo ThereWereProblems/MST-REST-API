@@ -19,6 +19,8 @@ namespace MST_REST_Web_API.Services
         string GenerateJwt(LoginDto dto);
         List<UserView> GetAll();
         void ChangePassword(NewPasswordDto dto);
+        void EditUser(UserEditDto dto);
+        void ChangeRole(int id, ChangeRoleDto dto);
     }
     public class AccountService : IAccountService
     {
@@ -130,8 +132,36 @@ namespace MST_REST_Web_API.Services
             var newhashedPassword = _passwordHasher.HashPassword(user, dto.NewPassword);
             user.PasswordHash = newhashedPassword;
             _context.SaveChanges();
-
         }
-       
+
+        public void EditUser(UserEditDto dto)
+        {
+            var iduser = (int)_userContextService.GetUserId;
+
+            var user = _context.Users
+                .FirstOrDefault(u => u.Id == iduser);
+            if (user == null)
+                throw new NotFoundException("User not exist");
+
+            user.Name = dto.Name;
+            user.Login = dto.Login;
+            _context.SaveChanges();
+        }
+
+        public void ChangeRole(int id, ChangeRoleDto dto)
+        {
+            var user = _context.Users
+                .FirstOrDefault(u => u.Id == id);
+            if (user == null)
+                throw new NotFoundException("User not exist");
+
+            var role = _context.Roles.FirstOrDefault(u => u.Id == dto.RoleId);
+            if (user == null)
+                throw new NotFoundException($"Role with id {dto.RoleId} not exist");
+
+            user.RoleId = dto.RoleId;
+
+            _context.SaveChanges();
+        }
     }
 }

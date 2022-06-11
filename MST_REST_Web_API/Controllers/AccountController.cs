@@ -61,5 +61,21 @@ namespace MST_REST_Web_API.Controllers
             _accountService.ChangePassword(dto);
             return Ok();
         }
+
+        [HttpPatch("edituser")]
+        [Authorize]
+        public ActionResult EditUser([FromBody] UserEditDto dto)
+        {
+            _accountService.EditUser(dto);
+            return Ok();
+        }
+
+        [HttpPatch("changerole/{id}")]
+        [Authorize(Roles = "Admin")]
+        public ActionResult ChangeRole([FromRoute] int id, [FromBody] ChangeRoleDto dto)
+        {
+            _accountService.ChangeRole(id, dto);
+            return Ok();
+        }
     }
 }
