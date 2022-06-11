@@ -5,6 +5,8 @@ using MST_REST_Web_API.Services;
 
 namespace MST_REST_Web_API.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     public class TestController : Controller
     {
         private readonly ITestService _testService;
@@ -14,7 +16,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpPost("create")]
-        [Authorize(Roles = "Configurator")]
+        [Authorize(Roles = "Configurator,Admin")]
         public ActionResult AddTest([FromBody] ScriptDto dto)
         {
             _testService.AddTest(dto);
@@ -22,7 +24,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpDelete("delete/{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Configurator,Admin")]
         public ActionResult DeleteTest([FromRoute] int id)
         {
             _testService.DeleteTest(id);
@@ -30,7 +32,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpPut("update/{id}")]
-        [Authorize(Roles = "Configurator")]
+        [Authorize(Roles = "Configurator,Admin")]
         public ActionResult UpdateTest([FromRoute] int id, [FromBody] ScriptDto dto)
         {
             _testService.UpdateTest(id, dto);
@@ -38,7 +40,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpPatch("execute/{id}")]
-        [Authorize(Roles = "Configurator,Tester")]
+        [Authorize(Roles = "Tester")]
         public ActionResult ExecuteTest([FromRoute] int id, [FromBody] TestDto dto)
         {
             _testService.ExecuteTest(id, dto);
@@ -46,7 +48,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpGet("gettodo")]
-        [Authorize(Roles = "Configurator,Tester")]
+        [Authorize(Roles = "Tester")]
         public ActionResult GetToDo()
         {
             var result =  _testService.GetToDo();
@@ -54,7 +56,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize(Roles = "Configurator")]
+        [Authorize(Roles = "Configurator,Admin")]
         public ActionResult GetAll()
         {
             var result = _testService.GetAll();
