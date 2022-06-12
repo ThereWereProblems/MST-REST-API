@@ -19,7 +19,7 @@ namespace MST_REST_Web_API.Services
         string GenerateJwt(LoginDto dto);
         List<UserView> GetAll();
         void ChangePassword(NewPasswordDto dto);
-        void EditUser(UserEditDto dto);
+        void EditUser(int id, UserEditDto dto);
         void ChangeRole(int id, ChangeRoleDto dto);
     }
     public class AccountService : IAccountService
@@ -134,12 +134,12 @@ namespace MST_REST_Web_API.Services
             _context.SaveChanges();
         }
 
-        public void EditUser(UserEditDto dto)
+        public void EditUser(int id, UserEditDto dto)
         {
-            var iduser = (int)_userContextService.GetUserId;
+            //var iduser = (int)_userContextService.GetUserId;
 
             var user = _context.Users
-                .FirstOrDefault(u => u.Id == iduser);
+                .FirstOrDefault(u => u.Id == id);
             if (user == null)
                 throw new NotFoundException("User not exist");
 

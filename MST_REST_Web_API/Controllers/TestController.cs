@@ -56,7 +56,7 @@ namespace MST_REST_Web_API.Controllers
         }
 
         [HttpGet("getall")]
-        [Authorize(Roles = "Configurator,Admin")]
+        [Authorize(Roles = "Tester,Configurator,Admin")]
         public ActionResult GetAll()
         {
             var result = _testService.GetAll();

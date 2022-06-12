@@ -62,11 +62,11 @@ namespace MST_REST_Web_API.Controllers
             return Ok();
         }
 
-        [HttpPatch("edituser")]
+        [HttpPatch("edituser/{id}")]
         [Authorize]
-        public ActionResult EditUser([FromBody] UserEditDto dto)
+        public ActionResult EditUser([FromRoute] int id, [FromBody] UserEditDto dto)
         {
-            _accountService.EditUser(dto);
+            _accountService.EditUser(id, dto);
             return Ok();
         }
 

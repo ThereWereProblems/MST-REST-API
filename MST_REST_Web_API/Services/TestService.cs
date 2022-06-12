@@ -38,7 +38,8 @@ namespace MST_REST_Web_API.Services
             {
                 Name = dto.Name,
                 Endpoints = new List<Entities.Endpoint>(),
-                Description = dto.Description
+                Description = dto.Description,
+                Comment = ""
             };
 
             foreach (var item in dto.Endpoints)
