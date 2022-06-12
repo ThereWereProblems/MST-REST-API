@@ -58,10 +58,11 @@ namespace MST_REST_Web_API.Services
 
         void ITestService.DeleteTest(int id)
         {
-            var script = _context.Scripts.FirstOrDefault(x => x.Id == id);
+            var script = _context.Scripts.Include(x => x.Endpoints).FirstOrDefault(x => x.Id == id);
 
             if (script == null)
                 throw new NotFoundException($"Script with id: {id} not exist");
+
 
             _context.Scripts.Remove(script);
             _context.SaveChanges();

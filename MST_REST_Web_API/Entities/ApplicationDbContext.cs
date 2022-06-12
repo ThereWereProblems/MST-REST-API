@@ -22,6 +22,12 @@ namespace MST_REST_Web_API.Entities
         {
             modelBuilder.Entity<Order>()
                 .HasMany(e => e.Products);
+
+            //modelBuilder.Entity<Script>()
+            //.HasMany(a => a.Endpoints)
+            //.WithRequired()
+            //.WillCascadeOnDelete(true);
+
         }
     }
 }
